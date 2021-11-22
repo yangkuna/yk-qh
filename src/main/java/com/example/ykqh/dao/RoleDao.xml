@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ykqh.dao.RoleDao">
+  <resultMap id="BaseResultMap" type="com.example.ykqh.model.YkRole">
+    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_type" jdbcType="INTEGER" property="roleType" />
+    <result column="modify_user" jdbcType="INTEGER" property="modifyUser" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    role_id, role_name, role_type, modify_user, modify_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from role
+    where roleId = #{roleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from role
+    where roleId = #{roleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="roleId" keyProperty="roleId" parameterType="com.example.ykqh.model.YkRole" useGeneratedKeys="true">
+    insert into role (roleName, roleType, modifyUser,
+      modifyTime)
+    values (#{roleName,jdbcType=VARCHAR}, #{roleType,jdbcType=INTEGER}, #{modifyUser,jdbcType=INTEGER},
+      #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="roleId" keyProperty="roleId" parameterType="com.example.ykqh.model.YkRole" useGeneratedKeys="true">
+    insert into role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleName != null">
+        roleName,
+      </if>
+      <if test="roleType != null">
+        roleType,
+      </if>
+      <if test="modifyUser != null">
+        modifyUser,
+      </if>
+      <if test="modifyTime != null">
+        modifyTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleType != null">
+        #{roleType,jdbcType=INTEGER},
+      </if>
+      <if test="modifyUser != null">
+        #{modifyUser,jdbcType=INTEGER},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.ykqh.model.YkRole">
+    update role
+    <set>
+      <if test="roleName != null">
+        roleName = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleType != null">
+        roleType = #{roleType,jdbcType=INTEGER},
+      </if>
+      <if test="modifyUser != null">
+        modifyUser = #{modifyUser,jdbcType=INTEGER},
+      </if>
+      <if test="modifyTime != null">
+        modifyTime = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where roleId = #{roleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.ykqh.model.YkRole">
+    update role
+    set roleName = #{roleName,jdbcType=VARCHAR},
+      roleType = #{roleType,jdbcType=INTEGER},
+      modifyUser = #{modifyUser,jdbcType=INTEGER},
+      modifyTime = #{modifyTime,jdbcType=TIMESTAMP}
+    where roleId = #{roleId,jdbcType=INTEGER}
+  </update>
+</mapper>

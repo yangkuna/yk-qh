@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ykqh.dao.SysLogDao">
+  <resultMap id="BaseResultMap" type="com.example.ykqh.model.YkLog">
+    <id column="log_id" jdbcType="INTEGER" property="logId" />
+    <result column="log_target" jdbcType="VARCHAR" property="logTarget" />
+    <result column="log_type" jdbcType="INTEGER" property="logType" />
+    <result column="log_method" jdbcType="VARCHAR" property="logMethod" />
+    <result column="log_content" jdbcType="VARCHAR" property="logContent" />
+    <result column="log_error" jdbcType="VARCHAR" property="logError" />
+    <result column="sys_ip" jdbcType="VARCHAR" property="sysIp" />
+    <result column="sys_addr" jdbcType="VARCHAR" property="sysAddr" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_user" jdbcType="INTEGER" property="modifyUser"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    log_id, log_target, log_type, log_method, log_content, log_error, sys_ip, sys_addr, modify_time, modify_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from qh_log
+    where log_id = #{logId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from qh_log
+    where log_id = #{logId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.ykqh.model.YkLog" useGeneratedKeys="true" keyColumn="log_id" keyProperty="logId">
+    insert into qh_log (log_id, log_target, log_type, log_method,
+      log_content, log_error, sys_ip, sys_addr, modify_time, modify_user)
+    values (#{logId,jdbcType=INTEGER}, #{logTarget,jdbcType=VARCHAR}, #{logType,jdbcType=INTEGER}, #{logMethod,jdbcType=VARCHAR},
+      #{logContent,jdbcType=VARCHAR}, #{logError,jdbcType=VARCHAR}, #{sysIp,jdbcType=VARCHAR}, #{sysAddr,jdbcType=VARCHAR},
+      #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUser,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="log_id" keyProperty="log_id" parameterType="com.example.ykqh.model.YkLog" useGeneratedKeys="true">
+    insert into qh_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logTarget != null">
+        log_target,
+      </if>
+      <if test="logType != null">
+        log_type,
+      </if>
+      <if test="logMethod != null">
+        log_method,
+      </if>
+      <if test="logContent != null">
+        log_content,
+      </if>
+      <if test="logError != null">
+        log_error,
+      </if>
+      <if test="sysIp != null">
+        sys_ip,
+      </if>
+      <if test="sysAddr != null">
+        sys_addr,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="modifyUser != null">
+        modify_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logTarget != null">
+        #{logTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="logType != null">
+        #{logType,jdbcType=INTEGER},
+      </if>
+      <if test="logMethod != null">
+        #{logMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="logContent != null">
+        #{logContent,jdbcType=VARCHAR},
+      </if>
+      <if test="logError != null">
+        #{logError,jdbcType=VARCHAR},
+      </if>
+      <if test="sysIp != null">
+        #{sysIp,jdbcType=VARCHAR},
+      </if>
+      <if test="sysAddr != null">
+        #{sysAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null">
+        #{modifyUser,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.ykqh.model.YkLog">
+    update qh_log
+    <set>
+      <if test="logTarget != null">
+        log_target = #{logTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="logType != null">
+        log_type = #{logType,jdbcType=INTEGER},
+      </if>
+      <if test="logMethod != null">
+        log_method = #{logMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="logContent != null">
+        log_content = #{logContent,jdbcType=VARCHAR},
+      </if>
+      <if test="logError != null">
+        log_error = #{logError,jdbcType=VARCHAR},
+      </if>
+      <if test="sysIp != null">
+        sys_ip = #{sysIp,jdbcType=VARCHAR},
+      </if>
+      <if test="sysAddr != null">
+        sys_addr = #{sysAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyUser != null">
+        modify_user = #{modifyUser,jdbcType=INTEGER},
+      </if>
+    </set>
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.ykqh.model.YkLog">
+    update qh_log
+    set log_target = #{logTarget,jdbcType=VARCHAR},
+      log_type = #{logType,jdbcType=INTEGER},
+      log_method = #{logMethod,jdbcType=VARCHAR},
+      log_content = #{logContent,jdbcType=VARCHAR},
+      log_error = #{logError,jdbcType=VARCHAR},
+      sys_ip = #{sysIp,jdbcType=VARCHAR},
+      sys_addr = #{sysAddr,jdbcType=VARCHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      modify_user = #{modifyUser,jdbcType=INTEGER}
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+</mapper>
