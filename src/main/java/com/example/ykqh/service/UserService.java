@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.ykqh.dao.RoleDao;
 import com.example.ykqh.dao.UserDao;
 import com.example.ykqh.model.YkUser;
+import com.example.ykqh.netty.MyChannelHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
@@ -89,6 +90,8 @@ public class UserService {
             UrlResource urlResource = new UrlResource(picture4);
             messageHelper.addAttachment(LocalDate.now() + ".jpg",urlResource);
             javaMailSender.send(message);
+            MyChannelHandler handler = new MyChannelHandler();
+            handler.sendAllMessage("你有新的邮件待读取");
         } catch (MessagingException e) {
             e.printStackTrace();
         }

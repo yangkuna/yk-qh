@@ -8,13 +8,13 @@ import java.util.List;
 
 @Repository
 public interface UserDao {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(@Param("userId") Integer userId);
 
     int insert(YkUser record);
 
     int insertSelective(YkUser record);
 
-    YkUser selectByPrimaryKey(@Param("userCode") String userCode, @Param("pwd") String pwd);
+    YkUser selectByPrimaryKey(@Param("userPhone") String userPhone, @Param("pwd") String pwd);
 
     int updateByPrimaryKeySelective(YkUser record);
 
@@ -24,5 +24,5 @@ public interface UserDao {
 
     List<YkUser> getAllUserInfo();
 
-    YkUser getUserInfoById(@Param("id") Integer id);
+    YkUser getUserInfoById(@Param("userId") Integer userId);
 }

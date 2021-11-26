@@ -18,6 +18,11 @@ public class YkUser implements Serializable {
     private Integer userId;
 
     /**
+     * 手机号码
+     */
+    private String userPhone;
+
+    /**
      * 姓名
      */
     private String userName;

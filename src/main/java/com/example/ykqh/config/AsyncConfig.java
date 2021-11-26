@@ -38,11 +38,11 @@ public class AsyncConfig implements AsyncConfigurer {
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
         // 核心线程数
-        taskExecutor.setCorePoolSize(6);
+        taskExecutor.setCorePoolSize(1);
         // 最大线程数
-        taskExecutor.setMaxPoolSize(12);
+        taskExecutor.setMaxPoolSize(2);
         // 队列最大长度
-        taskExecutor.setQueueCapacity(100);
+        taskExecutor.setQueueCapacity(10);
         // 空闲线程等待时间
         taskExecutor.setKeepAliveSeconds(30);
         // 线程名称前缀

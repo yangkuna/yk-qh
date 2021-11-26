@@ -6,10 +6,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,22 +17,18 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class RedisUtil {
-    private static StringRedisTemplate stringRedisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
 
-    private static RedisTemplate<String,Object> redisTemplate;
+    private final RedisTemplate<String,Object> redisTemplate;
 
-    public static void setRedisTemplate(StringRedisTemplate stringRedisTemplate) {
-        RedisUtil.stringRedisTemplate = stringRedisTemplate;
-    }
-
-    public static void setTemplate(RedisTemplate<String, Object> redisTemplate) {
-        RedisUtil.redisTemplate = redisTemplate;
+    public RedisUtil(StringRedisTemplate stringRedisTemplate, RedisTemplate<String, Object> redisTemplate) {
+        this.stringRedisTemplate = stringRedisTemplate;
+        this.redisTemplate = redisTemplate;
     }
 
     /**
     * 指定缓存失效时间
     */
-
     public void expire(String key, long time) {
         try {
             if (time > 0) {
@@ -46,11 +39,11 @@ public class RedisUtil {
         }
     }
 
-/**
+    /**
      * 根据key 获取过期时间
      * @param key 键 不能为null
-     * @return 时间(秒) 返回0代表为永久有效*/
-
+     * @return 时间(秒) 返回0代表为永久有效
+     */
     public long getExpire(String key) {
         Long time = redisTemplate.getExpire(key, TimeUnit.SECONDS);
         if(null == time){
@@ -59,13 +52,12 @@ public class RedisUtil {
         return time;
     }
 
-/**
+    /**
      * 判断key是否存在
      * @param key 键
-     * @return true 存在 false不存在*/
-
-
-    public boolean hasKey(String key) {
+     * @return true 存在 false不存在
+     */
+    public Boolean hasKey(String key) {
         if(StringUtils.hasLength(key)){
             return redisTemplate.hasKey(key);
         }
@@ -74,37 +66,35 @@ public class RedisUtil {
         }
     }
 
-/**
+    /**
      * 删除缓存
-     * @param key 可以传一个值 或多个*/
-
-
+     * @param key 可以传一个值 或多个
+     */
     public void del(String... key) {
         if (key != null && key.length > 0) {
             if (key.length == 1) {
                 redisTemplate.delete(key[0]);
             } else {
-                redisTemplate.delete((Collection<String>) CollectionUtils.arrayToList(key));
+                Collection<String> collection = Arrays.asList(key);
+                redisTemplate.delete(collection);
             }
         }
     }
 
-/**
+    /**
      * 普通缓存获取
      * @param key 键
-     * @return 值*/
-
-
+     * @return 值
+     */
     public Object get(String key) {
         return key == null ? null : redisTemplate.opsForValue().get(key);
     }
 
-/**
+    /**
      * 普通缓存放入
      * @param key 键
-     * @param value 值*/
-
-
+     * @param value 值
+     */
     public void set(String key, Object value) {
         try {
             redisTemplate.opsForValue().set(key, value);
@@ -112,14 +102,13 @@ public class RedisUtil {
             e.printStackTrace();
         }
     }
-/**
+    /**
      * 普通缓存放入并设置时间
      * @param key 键
      * @param value 值
      * @param time 时间(秒) time要大于0 如果time小于等于0 将设置无限期
-     * @return true成功 false 失败*/
-
-
+     * @return true成功 false 失败
+     */
     public boolean set(String key, Object value, long time) {
         try {
             if (time > 0) {
@@ -133,27 +122,26 @@ public class RedisUtil {
             return false;
         }
     }
-/**
+    /**
      * 递增
      * @param key 键
      * @param delta 要增加几(大于0)
-     * @return*/
-
-
-    public long incr(String key, long delta) {
+     * @return 数据
+     */
+    public Long incr(String key, long delta) {
         if (delta < 0) {
             throw new RuntimeException("递增因子必须大于0");
         }
         return redisTemplate.opsForValue().increment(key, delta);
     }
-/**
+
+    /**
      * 递减
      * @param key 键
      * @param delta 要减少几(小于0)
-     * @return*/
-
-
-    public long decr(String key, long delta) {
+     * @return 数据
+     */
+    public Long decr(String key, long delta) {
         if (delta < 0) {
             throw new RuntimeException("递减因子必须大于0");
         }
@@ -166,22 +154,20 @@ public class RedisUtil {
 /****************** Map start ****************/
 
 
-/**
+    /**
      * HashGet
      * @param key 键 不能为null
      * @param item 项 不能为null
-     * @return 值*/
-
-
-    public Object hget(String key, String item) {
+     * @return 值
+     */
+    public Object hashGet(String key, String item) {
         return redisTemplate.opsForHash().get(key, item);
     }
-/**
+    /**
      * 获取hashKey对应的所有键值
      * @param key 键
-     * @return 对应的多个键值*/
-
-
+     * @return 对应的多个键值
+     */
     public Map<Object, Object> hmget(String key) {
         return redisTemplate.opsForHash().entries(key);
     }
@@ -190,8 +176,6 @@ public class RedisUtil {
      * @param key 键
      * @param map 对应多个键值
      * @return true 成功 false 失败*/
-
-
     public boolean hmset(String key, Map<String, Object> map) {
         try {
             redisTemplate.opsForHash().putAll(key, map);
@@ -331,7 +315,7 @@ public class RedisUtil {
      * @return true 存在 false不存在*/
 
 
-    public boolean sHasKey(String key, Object value) {
+    public Boolean sHasKey(String key, Object value) {
         try {
             return redisTemplate.opsForSet().isMember(key, value);
         } catch (Exception e) {
@@ -348,12 +332,12 @@ public class RedisUtil {
      * @return 成功个数*/
 
 
-    public long sSet(String key, Object... values) {
+    public Long sSet(String key, Object... values) {
         try {
             return redisTemplate.opsForSet().add(key, values);
         } catch (Exception e) {
             e.printStackTrace();
-            return 0;
+            return 0L;
         }
     }
 
@@ -365,7 +349,7 @@ public class RedisUtil {
      * @return 成功个数*/
 
 
-    public long sSetAndTime(String key, long time, Object... values) {
+    public Long sSetAndTime(String key, long time, Object... values) {
         try {
             Long count = redisTemplate.opsForSet().add(key, values);
             if (time > 0)
@@ -373,7 +357,7 @@ public class RedisUtil {
             return count;
         } catch (Exception e) {
             e.printStackTrace();
-            return 0;
+            return 0L;
         }
     }
 
@@ -384,12 +368,12 @@ public class RedisUtil {
      * @return*/
 
 
-    public long sGetSetSize(String key) {
+    public Long sGetSetSize(String key) {
         try {
             return redisTemplate.opsForSet().size(key);
         } catch (Exception e) {
             e.printStackTrace();
-            return 0;
+            return 0L;
         }
     }
 
@@ -401,13 +385,12 @@ public class RedisUtil {
      * @return 移除的个数*/
 
 
-    public long setRemove(String key, Object... values) {
+    public Long setRemove(String key, Object... values) {
         try {
-            Long count = redisTemplate.opsForSet().remove(key, values);
-            return count;
+            return redisTemplate.opsForSet().remove(key, values);
         } catch (Exception e) {
             e.printStackTrace();
-            return 0;
+            return 0L;
         }
     }
 
@@ -442,12 +425,12 @@ public class RedisUtil {
      * @return*/
 
 
-    public long lGetListSize(String key) {
+    public Long lGetListSize(String key) {
         try {
             return redisTemplate.opsForList().size(key);
         } catch (Exception e) {
             e.printStackTrace();
-            return 0;
+            return 0L;
         }
     }
 
@@ -568,13 +551,12 @@ public class RedisUtil {
      * @return 移除的个数*/
 
 
-    public long lRemove(String key, long count, Object value) {
+    public Long lRemove(String key, long count, Object value) {
         try {
-            Long remove = redisTemplate.opsForList().remove(key, count, value);
-            return remove;
+            return redisTemplate.opsForList().remove(key, count, value);
         } catch (Exception e) {
             e.printStackTrace();
-            return 0;
+            return 0L;
         }
     }
 
