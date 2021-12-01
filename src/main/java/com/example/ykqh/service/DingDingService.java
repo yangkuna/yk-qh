@@ -1,5 +1,6 @@
 package com.example.ykqh.service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.ykqh.model.AtModel;
 import com.example.ykqh.model.DingModel;
@@ -32,7 +33,6 @@ public class DingDingService {
     @Value("${dingding.secret}")
     private String secret;
 
-    @Scheduled(cron = "0 54 16 * * ?")
     public void sendDingDingInfo() throws Exception {
         Long timestamp = System.currentTimeMillis();
         String sign = getSign(timestamp,secret);
@@ -40,12 +40,12 @@ public class DingDingService {
 
         DingModel dingModel = new DingModel();
         TextModel textModel = new TextModel();
-        textModel.setContent("智能提醒：终于可以了啊");
+        textModel.setContent("智能提醒：早上好，各位打工仔，昆老板给你们发了邮件");
         AtModel atModel = new AtModel();
         dingModel.setAt(atModel);
         dingModel.setText(textModel);
         String jsonString = JSONObject.toJSONString(dingModel);
-
+        jsonString = jsonString.replace("atAll","isAtAll");
         RestTemplate template = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json;charset=utf-8");

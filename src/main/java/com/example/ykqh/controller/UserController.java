@@ -9,6 +9,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -72,7 +74,9 @@ public class UserController {
     @PassToken
     public ResultObject sendMailEveryDay(String toMail){
         try {
-            userService.sendAttachmentsMail(toMail);
+            List<String> list = new ArrayList<>();
+            list.add(toMail);
+            userService.sendAttachmentsMail(list);
             return new ResultObject(CodeEnum.SUCCESS);
         }
         catch (Exception e){

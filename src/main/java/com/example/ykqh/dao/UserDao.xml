@@ -25,22 +25,22 @@
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"></include>
-    from YK_TEST
+    from YK_USER
     where USER_PHONE = #{userPhone,jdbcType=VARCHAR}
     and USER_PASSWORD = #{pwd,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from YK_TEST
+    delete from YK_USER
     where USER_ID = #{userId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" keyColumn="USER_ID" keyProperty="userId" parameterType="com.example.ykqh.model.YkUser" useGeneratedKeys="true">
-    insert into YK_TEST (USER_ID,USER_PHONE, USER_NAME, USER_PASSWORD, USER_SEX,USER_AGE, USER_POSITION, MODIFY_TIME,MODIFY_USER, USER_IMG, `STATE`)
+    insert into YK_USER (USER_ID,USER_PHONE, USER_NAME, USER_PASSWORD, USER_SEX,USER_AGE, USER_POSITION, MODIFY_TIME,MODIFY_USER, USER_IMG, `STATE`)
     values (#{userId,jdbcType=INTEGER},#{userPhone,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, #{userSex,jdbcType=INTEGER},
       #{userAge,jdbcType=INTEGER}, #{userPosition,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{modifyUser,jdbcType=INTEGER}, #{userImg,jdbcType=BLOB}, #{state,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" keyColumn="USER_ID" keyProperty="userId" parameterType="com.example.ykqh.model.YkUser" useGeneratedKeys="true">
-    insert into YK_TEST
+    insert into YK_USER
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userName != null">
         USER_NAME,
@@ -107,7 +107,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.example.ykqh.model.YkUser">
-    update YK_TEST
+    update YK_USER
     <set>
       <if test="userName != null">
         USER_NAME = #{userName,jdbcType=VARCHAR},
@@ -143,7 +143,7 @@
     where USER_ID = #{userId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.ykqh.model.YkUser">
-    update YK_TEST
+    update YK_USER
     set USER_NAME = #{userName,jdbcType=VARCHAR},
         USER_PHONE = #{userPhone,jdbcType=VARCHAR},
       USER_PASSWORD = #{userPassword,jdbcType=VARCHAR},
@@ -157,7 +157,7 @@
     where USER_ID = #{userId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.ykqh.model.YkUser">
-    update YK_TEST
+    update YK_USER
     set USER_NAME = #{userName,jdbcType=VARCHAR},
         USER_PHONE = #{userPhone,jdbcType=VARCHAR},
       USER_PASSWORD = #{userPassword,jdbcType=VARCHAR},
@@ -171,12 +171,12 @@
   </update>
   <select id="getAllUserInfo" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"></include>
-    from YK_TEST
+    from YK_USER
     where `STATE` &lt;= 1
   </select>
   <select id="getUserInfoById" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"></include>
-    from YK_TEST
+    from YK_USER
     where USER_ID = #{userId,jdbcType=INTEGER}
   </select>
 </mapper>

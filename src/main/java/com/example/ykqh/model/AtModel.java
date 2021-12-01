@@ -14,6 +14,15 @@ import java.util.List;
 public class AtModel implements Serializable {
     private boolean isAtAll;
 
+    @Override
+    public String toString() {
+        return "AtModel{" +
+                "isAtAll=" + isAtAll +
+                ", atMobiles=" + atMobiles +
+                ", atUserIds=" + atUserIds +
+                '}';
+    }
+
     private List<Integer> atMobiles;
 
     private List<Integer> atUserIds;

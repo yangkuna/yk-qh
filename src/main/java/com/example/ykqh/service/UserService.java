@@ -14,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -70,28 +72,25 @@ public class UserService {
         return userDao.getAllUserInfo();
     }
 
-    public void sendAttachmentsMail(String to) throws Exception {
+    public void sendAttachmentsMail(List<String> to) throws Exception {
         RestTemplate template = new RestTemplate();
         String data = template.getForObject("http://open.iciba.com/dsapi/",String.class);
         JSONObject object = JSONObject.parseObject(data);
         String note = object.getString("note");
-        String subject = "今天也要加油！";
+        String subject = "我来看你了！";
         String picture4 = object.getString("picture4");
-        // byte[] bytes = download(picture4);
         MimeMessage message = javaMailSender.createMimeMessage();
+        String[] list = to.toArray(new String[0]);
         try {
             MimeMessageHelper messageHelper = new MimeMessageHelper(message,true,"utf-8");
             messageHelper.setFrom(formMail,userName);
-            messageHelper.setTo(to);
+            messageHelper.setTo(list);
             messageHelper.setSubject(subject);
             messageHelper.setText(note,true);
             //携带附件
-            // ByteArrayResource byteArrayResource = new ByteArrayResource(bytes);
             UrlResource urlResource = new UrlResource(picture4);
             messageHelper.addAttachment(LocalDate.now() + ".jpg",urlResource);
             javaMailSender.send(message);
-            MyChannelHandler handler = new MyChannelHandler();
-            handler.sendAllMessage("你有新的邮件待读取");
         } catch (MessagingException e) {
             e.printStackTrace();
         }

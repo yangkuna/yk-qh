@@ -46,8 +46,7 @@ public class LoginController {
             map.put("token",token);
             map.put("user",user);
         }
-        redisTemplate.opsForHash().put("1","USER",user);
-        redisTemplate.opsForHash().put("1","TEST","123");
+        redisTemplate.opsForHash().put(userCode,user.getUserId().toString(),map);
         return new ResultObject(CodeEnum.SUCCESS,map);
     }
 
