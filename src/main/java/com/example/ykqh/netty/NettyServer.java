@@ -34,6 +34,7 @@ public class NettyServer {
             bootstrap.option(ChannelOption.SO_BACKLOG, 1024);
             bootstrap.group(boss, work)
                     .channel(NioServerSocketChannel.class)
+                    .childOption(ChannelOption.SO_KEEPALIVE,true)
                     .localAddress(port)
                     .childHandler(new MyChatServerInitializer());
             //绑定端口  开启事件驱动
