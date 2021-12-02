@@ -5,6 +5,8 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
+
 /**
  * @author 杨昆
  * @date 2021/11/23 10:07
@@ -57,6 +59,7 @@ public class MyChannelHandler extends SimpleChannelInboundHandler<TextWebSocketF
 
     public void sendAllMessage(String message){
         //收到信息后，群发给所有channel
+        message = LocalDate.now() + message;
         MyChannelHandlerPool.channelGroup.writeAndFlush( new TextWebSocketFrame(message));
     }
 }
