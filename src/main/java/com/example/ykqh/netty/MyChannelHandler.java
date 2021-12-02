@@ -6,6 +6,8 @@ import io.netty.handler.codec.http.websocketx.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @author 杨昆
@@ -59,7 +61,10 @@ public class MyChannelHandler extends SimpleChannelInboundHandler<TextWebSocketF
 
     public void sendAllMessage(String message){
         //收到信息后，群发给所有channel
-        message = LocalDate.now() + message;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.now();
+        dateTime.format(formatter);
+        message = dateTime.format(formatter) + " " + message;
         MyChannelHandlerPool.channelGroup.writeAndFlush( new TextWebSocketFrame(message));
     }
 }
