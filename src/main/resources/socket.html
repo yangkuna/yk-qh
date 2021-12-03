@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>匿名聊天室</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
     <script type="text/javascript">
         let socket;
         if(!window.WebSocket){
             window.WebSocket = window.MozWebSocket;
         }
         if(window.WebSocket){
-            socket = new WebSocket("ws://116.62.146.177/:9002/ws");
+            socket = new WebSocket("ws://116.62.146.177:9002/ws");
             socket.onmessage = function(event){
                 let data = event.data;
                 if(data.indexOf("num") !== -1){
@@ -58,6 +59,14 @@
                 send(message);
             }
         }
+    ///引入jquery
+        $(document).ready(function () {
+            $('#message').keydown(function (e) {
+                const $s = $('#message').val();
+                if (e.keyCode == 13)
+                    checkData($s);
+            });
+        });
     </script>
 </head>
 <body>
