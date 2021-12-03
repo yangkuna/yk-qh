@@ -40,7 +40,7 @@ public class DingDingService {
 
         DingModel dingModel = new DingModel();
         TextModel textModel = new TextModel();
-        textModel.setContent("智能提醒：早上好，各位打工仔，昆老板给你们发了邮件");
+        textModel.setContent("智能提醒：早上好，你有新的邮件待读取，");
         AtModel atModel = new AtModel();
         dingModel.setAt(atModel);
         dingModel.setText(textModel);

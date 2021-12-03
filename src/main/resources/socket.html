@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>匿名聊天室</title>
+    <script type="text/javascript">
+        let socket;
+        if(!window.WebSocket){
+            window.WebSocket = window.MozWebSocket;
+        }
+        if(window.WebSocket){
+            socket = new WebSocket("ws://116.62.146.177/:9002/ws");
+            socket.onmessage = function(event){
+                let data = event.data;
+                if(data.indexOf("num") !== -1){
+                    document.form1.num.value = data.substr(3);
+                }
+                else{
+                    const ta = document.getElementById('responseText');
+                    ta.value += event.data+"\r\n";
+                }
+            };
+            socket.onopen = function(){
+                const ta = document.getElementById('responseText');
+                ta.value = "大西瓜服务器--已连接  \r\n";
+
+            };
+            socket.onclose = function(){
+                const ta = document.getElementById('responseText');
+                ta.value += ta.value +"大西瓜服务器--已关闭 \r\n";
+                document.form1.num.value = 0;
+            };
+        }else{
+            alert("您的浏览器不支持WebSocket协议！");
+        }
+        function send(message){
+            if(!window.WebSocket){
+                return;
+            }
+            if(socket.readyState == WebSocket.OPEN){
+                socket.send(message);
+                let item = document.form1.message;
+                item.value = "";
+            }else{
+                alert("WebSocket连接没有建立成功！");
+            }
+        }
+        function clearScreen(){
+            let item = document.form1.responseText;
+            item.value = "大西瓜服务器--已连接  \r\n";
+        }
+        function checkData(message){
+            let a = document.form1.uid.value;
+            let b = document.form1.message.value;
+            if(a.length <= 0 || b.length <= 0){
+                alert("请输入昵称或消息内容！");
+            } else{
+                send(message);
+            }
+        }
+    </script>
+</head>
+<body>
+<form id="form1" name="form1" onSubmit="return checkData()">
+    <label class="la">欢迎使用</label>
+    <br/><br/>
+    <label>ID：</label><br/>
+    <input style="width: 250px;height: 25px" type="text" id="uid" name="uid" value="" placeholder="请输入你的昵称"/>
+    <p></p>
+    <label>TEXT：</label><br/>
+    <input style="width: 250px;height: 25px" type="text" id="message" name="message" value="" placeholder="请输入消息内容"/>
+    <br/><br/>
+    <input class="fa" type="button" value="发送消息"
+           onClick="checkData(this.form.uid.value+':'+this.form.message.value)" />
+    <input class="fa" type="button" value="清理屏幕" onClick="clearScreen()"/>
+    <label class="label1">当前在线人数:</label>
+    <label>
+        <input name="num" type="text" style="width: 30px" value="1">
+    </label>
+    <hr color="black" />
+    <h3>服务端返回的应答消息</h3>
+    <textarea id="responseText" style="width: 600px;height: 400px;"></textarea>
+</form>
+</body>
+<style>
+    form{
+        width: 600px;
+        height: 600px;
+        margin: auto;
+    }
+    .fa{
+        width: 100px;
+        height: 30px;
+        color: white;
+        background: dodgerblue;
+        border: white;
+    }
+    .la{
+        margin-left: 260px;
+        color: dodgerblue;
+    }
+    .label1{
+        margin-left: 200px;
+    }
+</style>
+</html>
