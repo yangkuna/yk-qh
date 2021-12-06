@@ -99,11 +99,7 @@
         <finalName>yk-qh</finalName>
         <resources>
             <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                    <include>**/*.properties</include>
-                </includes>
+                <directory>src/main/resources</directory>
                 <filtering>false</filtering>
             </resource>
         </resources>
