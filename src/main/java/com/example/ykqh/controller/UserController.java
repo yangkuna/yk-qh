@@ -15,10 +15,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
+/** 个人测试模块
  * @author 杨昆
  * @date 2021/6/17 9:10
- * @describe
+ * @describe 个人测试模块
  */
 @RestController
 @RequestMapping("/yk-qh/user")
@@ -40,6 +40,11 @@ public class UserController {
         this.redisTemplate = redisTemplate;
     }
 
+    /** 获取人员信息
+     * @param id 主键id
+     * @return 自定义结果
+     * @throws Exception 错误类
+     */
     @GetMapping("/getUserInfo")
     @PassToken
     public ResultObject getUserInfo(Integer id) throws Exception {
@@ -62,6 +67,10 @@ public class UserController {
         return new ResultObject(CodeEnum.SUCCESS, user);
     }
 
+    /** 插入患者数据
+     * @param ykUser 实体类
+     * @return 自定义结果
+     */
     @PostMapping("/insertUserInfo")
     public ResultObject insertUserInfo(@RequestBody YkUser ykUser){
         return new ResultObject(CodeEnum.SUCCESS,userService.insertUserInfo(ykUser));
@@ -70,7 +79,7 @@ public class UserController {
     /** 邮件发送接口
      * @param toMail 接收人邮箱地址
      */
-    @GetMapping("/updateUserInfo")
+    @GetMapping("/sendMailEveryDay")
     @PassToken
     public ResultObject sendMailEveryDay(String toMail){
         try {

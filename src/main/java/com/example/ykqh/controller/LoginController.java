@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
+/** 登录模块
  * @author 杨昆
  * @date 2021/6/20 9:49
  * @describe 登入登出
@@ -33,6 +33,12 @@ public class LoginController {
         this.redisTemplate = redisTemplate;
     }
 
+    /** 登录
+     * @param userCode 人员编码
+     * @param pwd 密码
+     * @return 自定义结果
+     * @throws JoseException 错误类
+     */
     @PassToken()
     @GetMapping("/loginIn")
     public ResultObject loginIn(String userCode, String pwd) throws JoseException {

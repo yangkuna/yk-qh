@@ -1,0 +1,8 @@
+{
+  "severUrl": "http://127.0.0.1:8082",
+  "isStrict": false,
+  "allInOne": true,
+  "outPath": "src/main/resources/static/doc",
+  "createDebugPage": true,
+  "project-name": "yk-smart-doc"
+}

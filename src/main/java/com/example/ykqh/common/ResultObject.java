@@ -9,8 +9,17 @@ import lombok.Data;
  */
 @Data
 public class ResultObject {
+    /**
+     * 编码
+     */
     private String code;
+    /**
+     * 信息
+     */
     private String msg;
+    /**
+     * 返回数据
+     */
     private Object data;
 
     public ResultObject(CodeEnum codeEnum){
