@@ -64,7 +64,7 @@
             $('#message').keydown(function (e) {
                 const $s = $('#message').val();
                 if (e.keyCode == 13)
-                    checkData($s);
+                    checkData(document.form1.uid.value + ":" + $s);
             });
         });
     </script>
