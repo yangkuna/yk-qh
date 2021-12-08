@@ -12,7 +12,7 @@
     }
   </style>
 </head>
-<body>
+<body style="background-color: #F0F0F0 !important;background:right bottom fixed no-repeat;">
 <h1>简约首页</h1>
 <p></p>
 
@@ -29,5 +29,130 @@
   <img src="BA.png">
   <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=34112502000135" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">皖公网安备 34112502000135号</p></a>
 </div>
+<script>
+  function HoverRabbit(){
+    this.explodeImage=new Image();
+    this.explodeImage.src="http://116.62.146.177/IMAGE/explode.png"
+    for(let i=1; i<=6; i++){
+      this.images[i]=new Image();
+      this.images[i].src="http://116.62.146.177/IMAGE/s"+i+".png";
+    }
+    if(typeof(CanvasGradient)!='undefined' && screen.width>1100){
+      this.canvas=document.createElement("canvas");
+      this.canvas.width=screen.width;
+      this.canvas.height=screen.height;
+      this.canvas.style.position='absolute';
+      this.canvas.style.left='0px';
+      this.canvas.style.top='0px';
+      this.canvas.style.display='none';
+      document.body.appendChild(this.canvas);
+      this.canvas.style.position='fixed';
+    }
+  }
+  HoverRabbit.prototype={
+    images:[],
+    explodeImage:null,
+    eyePositions:[],
+    current:1,
+    frame:1,
+    canvas:null,
+    interval:null,
+    start:function(){
+      const me = this;
+      this.eyePositions[1]={eye1x:123,eye1y:47,eye2x:104,eye2y:53};
+      this.eyePositions[2]={eye1x:120,eye1y:50,eye2x:101,eye2y:54};
+      this.eyePositions[3]={eye1x:119,eye1y:54,eye2x:97,eye2y:56};
+      this.eyePositions[4]={eye1x:112,eye1y:61,eye2x:90,eye2y:61};
+      this.eyePositions[5]={eye1x:105,eye1y:64,eye2x:85,eye2y:61};
+      this.eyePositions[6]={eye1x:98,eye1y:68,eye2x:79,eye2y:56};
+      document.onmousemove=function(e){
+        me.onmousemove(e);
+      }
+      if(this.canvas){
+        document.addEventListener("click",function(e){
+          me.ondblclick(e);
+        });
+      }
+    },
+    onmousemove:function(e){
+      const event = e;
+      const deg = Math.abs(screen.height - event.screenY) / (Math.abs(screen.width - event.screenX) + 1);
+      let n = 1;
+      if(deg>2) n=6;
+      else if(deg>1.4) n=5;
+      else if(deg>0.7) n=4;
+      else if(deg>0.45) n=3;
+      else if(deg>0.2) n=2;
+      if(this.current!==n){
+        document.body.style.backgroundImage="url("+this.images[n].src+")";
+        this.current=n;
+      }
+    },
+    drawBomb:function(ctxt,n,x,y){
+      const sx = 64 * (n % 4);
+      const sy = 64 * (Math.floor(n / 4));
+      ctxt.drawImage(this.explodeImage,sx,sy,64,64,x-32,y-32,64,64);
+    },
+    ondblclick:function(e){
+      if(this.canvas.style.display!=='none') return;
+      const me = this;
+      if(e.clientX>window.innerWidth-200 && e.clientY>window.innerHeight-200) return;
+      const ctxt = this.canvas.getContext("2d");
+      this.frame=1;
+      this.interval=setInterval(function(e2){
+        ctxt.clearRect(0,0,me.canvas.width,me.canvas.height);
+        switch(me.frame){
+          case 1:
+            ctxt.strokeStyle='rgba(247,166,71,1)';
+            me.canvas.style.display='block';
+          case 2:
+            if(me.frame==2){
+              ctxt.strokeStyle='rgba(247,166,71,0.5)';
+              me.drawBomb(ctxt,0,e.clientX,e.clientY);
+              //document.body.style.marginTop='-3px';
+              //document.body.style.marginLeft='-3px';
+            }
+          case 3:
+            if(me.frame==3){
+              ctxt.strokeStyle='rgba(247,166,71,0.1)';
+              me.drawBomb(ctxt,1,e.clientX,e.clientY);
+              //document.body.style.marginTop='3px';
+              //document.body.style.marginLeft='3px';
+            }
+            const eye1x = window.innerWidth - me.eyePositions[me.current].eye1x;
+            const eye1y = window.innerHeight - me.eyePositions[me.current].eye1y;
+            ctxt.lineWidth=3;
+            ctxt.beginPath();
+            ctxt.moveTo(eye1x,eye1y);
+            ctxt.lineTo(e.clientX,e.clientY);
+            ctxt.stroke();
+            const eye2x = window.innerWidth - me.eyePositions[me.current].eye2x;
+            const eye2y = window.innerHeight - me.eyePositions[me.current].eye2y;
+            ctxt.beginPath();
+            ctxt.moveTo(eye2x,eye2y);
+            ctxt.lineTo(e.clientX,e.clientY);
+            ctxt.stroke();
+            break;
+          case 4:
+            me.drawBomb(ctxt,2,e.clientX,e.clientY);
+            break;
+          case 14:
+            me.canvas.style.display='none';
+            window.clearInterval(me.interval);
+            break;
+          default:
+            me.drawBomb(ctxt,me.frame-2,e.clientX,e.clientY);
+        }
+        me.frame++;
+      },50);
+    }
+  };
+  function create_rabbit(e){
+    const s = new HoverRabbit();
+    s.start();
+  }
+  if(window.attachEvent) window.attachEvent("onload",create_rabbit);
+  else window.addEventListener("load",create_rabbit,false);
+</script>
 </body>
 </html>
